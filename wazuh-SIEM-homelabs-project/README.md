@@ -1,3 +1,4 @@
+<img width="700" height="140" alt="Screenshot 2026-10-04 224049" src="https://github.com/user-attachments/assets/80cbcdec-0290-4afc-a265-0bb649b575a1" />
 # 🛡️ Detection and Analysis of Brute Force Authentication Attacks using Wazuh SIEM
 
 ![Wazuh](https://img.shields.io/badge/Wazuh-SIEM-blue?style=for-the-badge&logo=wazuh)
@@ -35,15 +36,15 @@
 ## 3. Pre-Simulation Setup & Hardening Configuration 
 Windows Audit Policy Enforcement
 Enabled login failure auditing via Administrator Powershell to capture failed  authentication events:
-![Descriptive Text]("C:\Users\acer\Pictures\Screenshots\Screenshot 2026-10-04 215803.png")
+<img width="838" height="302" alt="Screenshot 2026-10-04 215803" src="https://github.com/user-attachments/assets/3c023f02-5a4c-4e13-8f5f-bb222320a830" />
 
 ---
 ## 4. Attack Simulation
 To test the SIEM’s real-time alert capabilities, a high-velocity authentication brute-force attempt was executed directly on the Windows 11 endpoint using local process invocation (net use local IPC share) :
-![Attack Simulation](C:\Users\acer\Pictures\Screenshots\Screenshot 2026-10-04 224049.png)
+<img width="700" height="140" alt="Screenshot 2026-10-04 224049" src="https://github.com/user-attachments/assets/72de0aab-0e1b-4825-80ab-76801f707ec5" />
 
-* **Attack Parameters : 
-Target account : Administrator 
-Attack vector : Network Connection Request (Logon Type 3)
-Velocity & pattern : 15 request executed within 3 seconds to mimic automated credential spraying/ brute-forcing
+Attack Parameters : 
+* **Target account : Administrator 
+* **Attack vector : Network Connection Request (Logon Type 3)
+* **Velocity & pattern : 15 request executed within 3 seconds to mimic automated credential spraying/ brute-forcing
 
