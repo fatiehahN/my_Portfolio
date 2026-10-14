@@ -7,13 +7,13 @@
 
 ---
 
-## 1. 📌 Project Title & Overview
+## 1.  Project Title & Overview
 * **Project Title:** End-to-End Threat Detection and Telemetry Analysis of Brute Force Attacks
 * **Objective:** To build a controlled Virtual SOC environment using Wazuh SIEM, simulate an automated authentication brute-force attack on a Windows 11 endpoint, analyze security log telemetry, and propose actionable mitigation strategies.
 
 ---
 
-## 2. 🏗️ Environment & Architecture
+## 2.  Environment & Architecture
 
 ### Attack & Telemetry Flow:
 ```text
@@ -30,12 +30,20 @@
                                    │
                                    ▼
 [5. Wazuh Dashboard]   ──> Displays spike (17+ hits) in real-time Threat Hunting dashboard
+```
+---
+## 3. Pre-Simulation Setup & Hardening Configuration 
+* ** Windows Audit Policy Enforcement
+Enabled login failure auditing via Administrator Powershell to capture failed  authentication events:
+![Descriptive Text]("C:\Users\acer\Pictures\Screenshots\Screenshot 2026-10-04 215803.png")
 
 ---
-## 3. ⚙️ Pre-Simulation Setup & Hardening Configuration
+## 4. Attack Simulation
+* ** To test the SIEM’s real-time alert capabilities, a high-velocity authentication brute-force attempt was executed directly on the Windows 11 endpoint using local process invocation (net use local IPC share) :
+![Descriptive Text]("C:\Users\acer\Pictures\Screenshots\Screenshot 2026-10-04 224049.png")
 
-### 1. Windows Audit Policy Enforcement
-Enabled login failure auditing via Administrator PowerShell on the Windows 11 target host to capture failed authentication events (`Event ID 4625`):
+* **Attack Parameters : 
+Target account : Administrator 
+Attack vector : Network Connection Request (Logon Type 3)
+Velocity & pattern : 15 request executed within 3 seconds to mimic automated credential spraying/ brute-forcing
 
-```powershell
-auditpol /set /subcategory:"Logon" /failure:enable
