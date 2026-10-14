@@ -44,7 +44,13 @@ To test the SIEM’s real-time alert capabilities, a high-velocity authenticatio
 <img width="700" height="140" alt="Screenshot 2026-10-04 224049" src="https://github.com/user-attachments/assets/72de0aab-0e1b-4825-80ab-76801f707ec5" />
 
 Attack Parameters : 
-* **Target account : Administrator 
-* **Attack vector : Network Connection Request (Logon Type 3)
-* **Velocity & pattern : 15 request executed within 3 seconds to mimic automated credential spraying/ brute-forcing
+* Target account : Administrator 
+* Attack vector : Network Connection Request (Logon Type 3)
+* Velocity & pattern : 15 request executed within 3 seconds to mimic automated credential spraying/ brute-forcing
+
+---
+## 5. Telemetry & SIEM Alert Investigation
+To test the SIEM’s real-time alert capabilities, a high-velocity authentication brute-force attempt was executed directly on the Windows 11 endpoint using local process invocation (net use local IPC share) :
+<img width="881" height="320" alt="Screenshot 2026-10-15 025553" src="https://github.com/user-attachments/assets/77d424dc-807c-45dd-a034-27c7f1d9e99b" />
+> **Figure 5.1:** *Wazuh SIEM Dashboard Overview during Attack Simulation.*
 
