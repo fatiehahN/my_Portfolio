@@ -1,4 +1,4 @@
-# 🛡️ Detection and Analysis of Brute Force Authentication Attacks using Wazuh SIEM
+<img width="807" height="598" alt="Screenshot 2026-10-15 030436" src="https://github.com/user-attachments/assets/a26418ea-fb03-4316-8508-01938ec3de1f" /># 🛡️ Detection and Analysis of Brute Force Authentication Attacks using Wazuh SIEM
 
 ![Wazuh](https://img.shields.io/badge/Wazuh-SIEM-blue?style=for-the-badge&logo=wazuh)
 ![Windows 11](https://img.shields.io/badge/Target-Windows%2011-0078D4?style=for-the-badge&logo=windows)
@@ -52,10 +52,11 @@ Attack Parameters :
 To test the SIEM’s real-time alert capabilities, a high-velocity authentication brute-force attempt was executed directly on the Windows 11 endpoint using local process invocation (net use local IPC share) :
 <img width="881" height="320" alt="Screenshot 2026-10-15 025553" src="https://github.com/user-attachments/assets/77d424dc-807c-45dd-a034-27c7f1d9e99b" />
 > **Figure 5.1:** *Wazuh SIEM Dashboard Overview during Attack Simulation.*
+
 <img width="926" height="667" alt="Screenshot 2026-10-05 204604" src="https://github.com/user-attachments/assets/f3a3424e-0e0f-45b2-8c40-aafc6ab397cd" />
 > **Figure 5.2:** *Granular Threat Hunting Logs & Event Correlation.*
 
-
+<img width="807" height="598" alt="Screenshot 2026-10-15 030436" src="https://github.com/user-attachments/assets/e95ce939-ed46-4c89-86e0-6fe28549c322" />
 
 
 | Telemetry Field | Logged Value | SOC Analyst Analysis |
@@ -66,3 +67,22 @@ To test the SIEM’s real-time alert capabilities, a high-velocity authenticatio
 | `rule.level` | 5 | Alert Severity : Medium level notification |
 | `data.win.eventdata.targetUserName` | Administrator | Indicates targeting of a default privileged account |
 | `data.win.eventdata.logonType` | 3 | Network Logon (SMB/ Shared Folder / Remote Network connection) |
+---
+## 6. Incident Analysis & Key Findings
+1. 100% Detection Rate : Wazuh successfully captured all simulated failure attempts 
+2. Pattern Recognition : High-density clustering of Event ID 4625 with identical targetUserName : Administrator and LogonType : 3 within seconds confirms automated credential-guessing behavior rather than human password error
+3. Risk Exposure : Targeting default privileged accounts poses a severe risk if password lockout policies are missing or weak
+
+---
+## 7. Recommended Response & Mitigation Strategy
+1.**Enforce Account Lockout Policy**: Configure Group Policy (GPO) to lock accounts after 5 failed attempts within a 5-minute window.
+2. **Account Hardening**: Rename or disable the default Administrator account to render automated scripts ineffective.
+2. **Automated Incident Response (Active Response)**: Configure Wazuh Active Response scripts to automatically ban or block source IP addresses via Windows Defender Firewall upon triggering Rule 60122 multiple times.
+
+---
+## 8. Lessons Learned & Skills Demonstrated
+* **Security Operations & SIEM**: Log ingestion, event correlation, and rule parsing using Wazuh.
+* **Endpoint Telemetry**: Deep understanding of Windows Security Event IDs (4625) and Logon Types (LogonType 3).
+* **Threat Simulation**: Scripting adversary techniques in PowerShell to test monitoring capabilities.
+* **Documentation & Reporting**: Structure incident findings into actionable SOC investigation reports.
+
