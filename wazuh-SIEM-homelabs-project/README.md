@@ -1,4 +1,3 @@
-<img width="700" height="140" alt="Screenshot 2026-10-04 224049" src="https://github.com/user-attachments/assets/80cbcdec-0290-4afc-a265-0bb649b575a1" />
 # 🛡️ Detection and Analysis of Brute Force Authentication Attacks using Wazuh SIEM
 
 ![Wazuh](https://img.shields.io/badge/Wazuh-SIEM-blue?style=for-the-badge&logo=wazuh)
@@ -54,3 +53,14 @@ To test the SIEM’s real-time alert capabilities, a high-velocity authenticatio
 <img width="881" height="320" alt="Screenshot 2026-10-15 025553" src="https://github.com/user-attachments/assets/77d424dc-807c-45dd-a034-27c7f1d9e99b" />
 > **Figure 5.1:** *Wazuh SIEM Dashboard Overview during Attack Simulation.*
 
+<img width="926" height="667" alt="Screenshot 2026-10-05 204604" src="https://github.com/user-attachments/assets/f3a3424e-0e0f-45b2-8c40-aafc6ab397cd" />
+> **Figure 5.2:** * Granular Threat Hunting Logs & Event Correlation.*
+
+| Telemetry Field | Logged Value | SOC Analyst Analysis |
+| :--- | :--- | :--- |
+| `agent.name` | Windows-VM-Agent | Identifies the targeted host endpoint within the lab environment |
+| `data.win.system.eventID` | 4625 | Standard Windows Security Event ID : An account failed to log on |
+| `rule.id` | 60122 | Wazuh Core Detection Rule: Logon Failure- Unknown user or bad password |
+| `rule.level` | 5 | Alert Severity : Medium level notification |
+| `data.win.eventdata.targetUserName` | Administrator | Indicates targeting of a default privileged account |
+| `data.win.eventdata.logonType` | 3 | Network Logon (SMB/ Shared Folder / Remote Network connection) |
