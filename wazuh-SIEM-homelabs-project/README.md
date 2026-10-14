@@ -1,4 +1,4 @@
-<img width="807" height="598" alt="Screenshot 2026-10-15 030436" src="https://github.com/user-attachments/assets/a26418ea-fb03-4316-8508-01938ec3de1f" /># 🛡️ Detection and Analysis of Brute Force Authentication Attacks using Wazuh SIEM
+# 🛡️ Detection and Analysis of Brute Force Authentication Attacks using Wazuh SIEM
 
 ![Wazuh](https://img.shields.io/badge/Wazuh-SIEM-blue?style=for-the-badge&logo=wazuh)
 ![Windows 11](https://img.shields.io/badge/Target-Windows%2011-0078D4?style=for-the-badge&logo=windows)
