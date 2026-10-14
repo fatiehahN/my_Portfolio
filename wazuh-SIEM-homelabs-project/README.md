@@ -33,14 +33,14 @@
 ```
 ---
 ## 3. Pre-Simulation Setup & Hardening Configuration 
-* ** Windows Audit Policy Enforcement
+Windows Audit Policy Enforcement
 Enabled login failure auditing via Administrator Powershell to capture failed  authentication events:
 ![Descriptive Text]("C:\Users\acer\Pictures\Screenshots\Screenshot 2026-10-04 215803.png")
 
 ---
 ## 4. Attack Simulation
-* ** To test the SIEM’s real-time alert capabilities, a high-velocity authentication brute-force attempt was executed directly on the Windows 11 endpoint using local process invocation (net use local IPC share) :
-![Descriptive Text]("C:\Users\acer\Pictures\Screenshots\Screenshot 2026-10-04 224049.png")
+To test the SIEM’s real-time alert capabilities, a high-velocity authentication brute-force attempt was executed directly on the Windows 11 endpoint using local process invocation (net use local IPC share) :
+![Attack Simulation](C:\Users\acer\Pictures\Screenshots\Screenshot 2026-10-04 224049.png)
 
 * **Attack Parameters : 
 Target account : Administrator 
