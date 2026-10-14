@@ -58,50 +58,102 @@ New-Item -Path "C:\CriticalData\confidential_passwords.txt" -ItemType File -Valu
 <img width="842" height="175" alt="Screenshot 2026-10-06 212238" src="https://github.com/user-attachments/assets/767f2517-3385-431a-96cc-7935cd4d9613" />
 
 
-Real-Time File Creation Detection (Rule 554):
+**Real-Time File Creation Detection (Rule 554):**
+
 Upon creating a new file in the monitored directory, the Wazuh Syscheck module immediately captured the file creation event from Windows-VM-Agent. The Wazuh Manager correlated the event telemetry and triggered Rule 554 (File added to the system) at Rule Level 5.
 
 <img width="946" height="507" alt="Screenshot 2026-10-06 213413" src="https://github.com/user-attachments/assets/fae0b524-9250-49fd-b335-17e74c625efd" />
 
 
----
-## 5. Telemetry & SIEM Alert Investigation
-To test the SIEM’s real-time alert capabilities, a high-velocity authentication brute-force attempt was executed directly on the Windows 11 endpoint using local process invocation (net use local IPC share) :
-<img width="881" height="320" alt="Screenshot 2026-10-15 025553" src="https://github.com/user-attachments/assets/77d424dc-807c-45dd-a034-27c7f1d9e99b" />
-> **Figure 5.1:** *Wazuh SIEM Dashboard Overview during Attack Simulation.*
+**File Creation (Added) Telemetry**
 
-<img width="926" height="667" alt="Screenshot 2026-10-05 204604" src="https://github.com/user-attachments/assets/f3a3424e-0e0f-45b2-8c40-aafc6ab397cd" />
+<img width="3360" height="1890" alt="Untitled design (1)" src="https://github.com/user-attachments/assets/3d175891-1cdc-4f5d-94b1-2468d6377e09" />
 
-> **Figure 5.2:** *Granular Threat Hunting Logs & Event Correlation.*
+**File Creation Telemetry Table**
 
-
-<img width="807" height="598" alt="Screenshot 2026-10-15 030436" src="https://github.com/user-attachments/assets/e95ce939-ed46-4c89-86e0-6fe28549c322" />
-
-
-| Telemetry Field | Logged Value | SOC Analyst Analysis |
+| Telemetry Field | Logged Value | SOC Analyst Interpretation |
 | :--- | :--- | :--- |
-| `agent.name` | Windows-VM-Agent | Identifies the targeted host endpoint within the lab environment |
-| `data.win.system.eventID` | 4625 | Standard Windows Security Event ID : An account failed to log on |
-| `rule.id` | 60122 | Wazuh Core Detection Rule: Logon Failure- Unknown user or bad password |
-| `rule.level` | 5 | Alert Severity : Medium level notification |
-| `data.win.eventdata.targetUserName` | Administrator | Indicates targeting of a default privileged account |
-| `data.win.eventdata.logonType` | 3 | Network Logon (SMB/ Shared Folder / Remote Network connection) |
----
-## 6. Incident Analysis & Key Findings
-1. 100% Detection Rate : Wazuh successfully captured all simulated failure attempts 
-2. Pattern Recognition : High-density clustering of Event ID 4625 with identical targetUserName : Administrator and LogonType : 3 within seconds confirms automated credential-guessing behavior rather than human password error
-3. Risk Exposure : Targeting default privileged accounts poses a severe risk if password lockout policies are missing or weak
+| `syscheck.path` | `c:\criticaldata\confidential_passwords.txt` | Target path where the new file artefact was created. |
+| `syscheck.event` | `added` | Action type confirming a new file system entry. |
+| `rule.id` (Level) | `554 (Level 5)` | Wazuh's default alert code for "New File Created" with a Medium severity level. |
+| `syscheck.audit.user.name` | `fnbiyy` | Who did it: Proves that the user account fnbiyy physically created this file. |
+| `syscheck.uname.after` | `Administrator` | Shows that the file was created under Administrator permission settings. |
+| `syscheck.mode` | `whodata` | Confirms real-time tracking is active using Windows Security logs. |
+| `syscheck.sha256_after` | `343fcb40497549085c98ae137c137116a5c2442eb8dc0bf0cac3a3419ce05b9f` | Initial SHA-256 cryptographic hash of the new file content. |
+
+### 2. Phase 2 : File Modification (Data Tampering)
+
+Add-Content -Path "C:\CriticalData\confidential_passwords.txt" -Value "`nNew_Admin_Hash_2026"
+<img width="848" height="246" alt="Screenshot 2026-10-06 214019" src="https://github.com/user-attachments/assets/0b67c8f5-ecde-4626-b227-4b32ada30a9c" />
+
+**Real-Time File Modified Detection (Rule 550):**
+
+Upon modifying the contents of a file in the monitored directory, the Wazuh Syscheck module instantly detected the content alteration on Windows-VM-Agent. The Wazuh Manager correlated the event telemetry and triggered Rule 550 (Integrity checksum changed.) at Rule Level 7.
+<img width="937" height="570" alt="Screenshot 2026-10-06 214302" src="https://github.com/user-attachments/assets/bfbb3ef6-fc2c-4a37-9039-791f9e779015" />
+
+**File Modification Telemetry**
+
+<img width="3360" height="1890" alt="Untitled design (2)" src="https://github.com/user-attachments/assets/80808c15-8bb1-4bd6-92a0-8a12a59ccf5c" />
+
+**File Modification Telemetry Table**
+
+| Telemetry Field | Logged Value | SOC Analyst Interpretation |
+| :--- | :--- | :--- |
+| `syscheck.path` | `c:\criticaldata\confidential_passwords.txt` | Shows which specific file was edited or tampered with. |
+| `syscheck.event` | `modified` | Confirms that someone opened the file and changed its contents. |
+| `rule.id` (Level) | `550 (Level 7)` | Wazuh's alert code for "File Content Changed" with a Higher severity level. |
+| `syscheck.audit.user.name` | `fnbiyy` | Who did it: Proves that user fnbiyy edited the text inside the file. |
+| `syscheck.uname.after` | `Administrator` | Shows the file owner context during the editing process. |
+| `syscheck.mode` | `whodata` | Confirms real-time tracking is active using Windows Security logs. |
+| `syscheck.sha256_before` | `343fcb40497549085c98ae137c137116a5c2442eb8dc0bf0cac3a3419ce05b9f` | The original file fingerprint before any changes were made. |
+| `syscheck.sha256_after` | `ab02902ee43d0a7243e589787c6f56ce232b3ce44b02f197376d2733f5044387` | The new file fingerprint after editing. The difference between before and after proves mathematically that the content was changed. |
+
+
+### 3. Phase 3 : File Deletion
+
+Remove-Item -Path "C:\CriticalData\confidential_passwords.txt"
+
+<img width="797" height="97" alt="Screenshot 2026-10-06 214447" src="https://github.com/user-attachments/assets/0cf6bf3f-2262-4abb-9a36-8e4dda2141ba" />
+
+**Real-Time File Deletion Detection (Rule 553):**
+Upon deleting a file from the monitored directory, the Wazuh Syscheck module instantly captured the deletion event on Windows-VM-Agent. The Wazuh Manager correlated the event telemetry and triggered Rule 553 (File deleted.) at Rule Level 7.
+
+<img width="933" height="438" alt="Screenshot 2026-10-06 214532" src="https://github.com/user-attachments/assets/4eddcb74-53d4-4ec3-8bd1-cad724c3580a" />
+
+**File Deletion  Telemetry**
+
+<img width="3360" height="1890" alt="Untitled design (3)" src="https://github.com/user-attachments/assets/70dcc43a-5854-4a5c-83d4-fcffc86a2528" />
+
+**File Deleted Telemetry Table**
+
+| Telemetry Field | Logged Value | SOC Analyst Interpretation |
+| :--- | :--- | :--- |
+| `syscheck.path` | `c:\criticaldata\confidential_passwords.txt` | Shows the file path that was removed or destroyed. |
+| `syscheck.event` | `deleted` | Confirms that the file was deleted from the hard drive. |
+| `rule.id` (Level) | `553 (Level 7)` | Wazuh's alert code for "File Deleted" with a High severity level. |
+| `syscheck.audit.user.name` | `fnbiyy` | Who did it: Proves that user fnbiyy deleted the file. |
+| `syscheck.uname.after` | `Administrator` | Shows the file owner context during the deletion. |
+| `syscheck.mode` | `whodata` | Confirms real-time tracking is active using Windows Security logs. |
+| `syscheck.audit.process.name` | `C:\...\powershell.exe` | Tool used: Shows PowerShell was the process used to delete the file. |
+| `syscheck.sha256_after` | `ab02902ee43d0a7243e589787c6f56ce232b3ce44b02f197376d2733f5044387` | The last known SHA-256 fingerprint of the file contents right before it was erased. |
 
 ---
-## 7. Recommended Response & Mitigation Strategy
-1.**Enforce Account Lockout Policy**: Configure Group Policy (GPO) to lock accounts after 5 failed attempts within a 5-minute window.
-2. **Account Hardening**: Rename or disable the default Administrator account to render automated scripts ineffective.
-2. **Automated Incident Response (Active Response)**: Configure Wazuh Active Response scripts to automatically ban or block source IP addresses via Windows Defender Firewall upon triggering Rule 60122 multiple times.
+## 5. Key Finding & SOC Investigation Insights
+
+* **Knowing Who Did It (User Accountability):**
+By turning on whodata="yes", Wazuh clearly captured the exact username (syscheck.audit.user.name: fnbiyy). This gives SOC analysts direct proof of WHO created, changed, or deleted the file during an investigation.
+* **Mathematical Proof of File Changes (Hash Changes):**
+When the file was edited (Rule 550), the SHA-256 fingerprint changed from 343fcb40... (before) to ab02902e... (after). Because two different files cannot have the exact same hash, this difference proves 100% that the file contents were modified.
+* **Detecting Ransomware Patterns:**
+The quick sequence of Rule 554 (File Created)  Rule 550 (File Edited)  Rule 553 (File Deleted) mimics how real ransomware works: it creates a payload, encrypts your data, and deletes the original file.
 
 ---
-## 8. Lessons Learned & Skills Demonstrated
-* **Security Operations & SIEM**: Log ingestion, event correlation, and rule parsing using Wazuh.
-* **Endpoint Telemetry**: Deep understanding of Windows Security Event IDs (4625) and Logon Types (LogonType 3).
-* **Threat Simulation**: Scripting adversary techniques in PowerShell to test monitoring capabilities.
-* **Documentation & Reporting**: Structure incident findings into actionable SOC investigation reports.
+## 6. Recommended Response & Mitigation Strategy
+* **Lock Down Important Folders (Access Controls):**
+Restrict folder permissions so that normal users cannot easily edit or delete sensitive files in C:\CriticalData.
+* **Raise Alert Levels for System Files:**
+Set up custom Wazuh rules to trigger high-severity alerts (Level 12+) if anyone touches critical system folders like C:\Windows\System32\.
+* **Automate Threat Response (Active Response):**
+Configure Wazuh to automatically disconnect a computer from the network if it detects mass file deletions (Rule 553) in a short time (e.g., 50 files deleted in 10 seconds).
+
 
