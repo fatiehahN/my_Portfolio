@@ -54,7 +54,9 @@ To test the SIEM’s real-time alert capabilities, a high-velocity authenticatio
 > **Figure 5.1:** *Wazuh SIEM Dashboard Overview during Attack Simulation.*
 
 <img width="926" height="667" alt="Screenshot 2026-10-05 204604" src="https://github.com/user-attachments/assets/f3a3424e-0e0f-45b2-8c40-aafc6ab397cd" />
+
 > **Figure 5.2:** *Granular Threat Hunting Logs & Event Correlation.*
+
 
 <img width="807" height="598" alt="Screenshot 2026-10-15 030436" src="https://github.com/user-attachments/assets/e95ce939-ed46-4c89-86e0-6fe28549c322" />
 
