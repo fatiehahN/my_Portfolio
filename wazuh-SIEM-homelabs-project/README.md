@@ -30,3 +30,12 @@
                                    │
                                    ▼
 [5. Wazuh Dashboard]   ──> Displays spike (17+ hits) in real-time Threat Hunting dashboard
+
+---
+## 3. ⚙️ Pre-Simulation Setup & Hardening Configuration
+
+### 1. Windows Audit Policy Enforcement
+Enabled login failure auditing via Administrator PowerShell on the Windows 11 target host to capture failed authentication events (`Event ID 4625`):
+
+```powershell
+auditpol /set /subcategory:"Logon" /failure:enable
