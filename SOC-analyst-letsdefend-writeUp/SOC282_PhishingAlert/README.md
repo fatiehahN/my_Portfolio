@@ -1,17 +1,17 @@
 # 🛡️ LetsDefend Lab Write-Up: SOC282 - Phishing Alert (Deceptive Mail Detected)
 
 ## 📌 Executive Summary
-* **Platform:** LetsDefend[cite: 18]
-* **Alert Name:** SOC282 - Phishing Alert - Deceptive Mail Detected[cite: 18]
-* **Event ID:** 257[cite: 18]
-* **Rule Name:** SOC282 - Phishing Alert - Deceptive Mail Detected[cite: 18]
-* **Alert Type:** Exchange[cite: 18]
-* **Difficulty / Severity:** Medium[cite: 18]
+* **Platform:** LetsDefend
+* **Alert Name:** SOC282 - Phishing Alert - Deceptive Mail Detected
+* **Event ID:** 257
+* **Rule Name:** SOC282 - Phishing Alert - Deceptive Mail Detected
+* **Alert Type:** Exchange
+* **Difficulty / Severity:** Medium
 * **MITRE ATT&CK Techniques:**
-  * `T1566` - Initial Access: Phishing[cite: 18]
-  * `T1566.002` - Initial Access: Spearphishing Link[cite: 18]
-  * `T1059` - Execution: Command and Scripting Interpreter[cite: 18]
-  * `T1204` - Execution: User Execution[cite: 18]
+  * `T1566` - Initial Access: Phishing
+  * `T1566.002` - Initial Access: Spearphishing Link
+  * `T1059` - Execution: Command and Scripting Interpreter
+  * `T1204` - Execution: User Execution
 
 ---
 
@@ -88,3 +88,88 @@
 
 <img width="725" height="456" alt="Screenshot 2026-10-15 002828" src="https://github.com/user-attachments/assets/94f231b9-4672-4963-b9f8-6c9c97d66e10" />
 
+---
+
+## 📘 Playbook Execution & Incident Handling
+
+### Action 1: Parse Email Information
+* **When was it sent?:** May 12, 2024, 23:22:00 (or May 13, 2024, 09:22 AM per alert header)
+* **Email's SMTP Address:** `103.80.134.63`
+* **Sender Address:** `free@coffeeshooop.com`
+* **Recipient Address:** `Felix@letsdefend.io`
+* **Mail Content Suspicious?:** Yes (Typosquatted domain, urgency tactics, external download links)
+* **Attachments?:** Yes (`free-coffee.zip`)
+<img width="583" height="305" alt="Screenshot 2026-10-15 005519" src="https://github.com/user-attachments/assets/6fc221eb-ca3d-49ca-8991-c2c4bfd21d63" />
+
+
+### Action 2: Check for Attachments or URLs
+* **Selected Option:** `Yes`
+* **Attachment:** `free-coffee.zip`
+* **Embedded URL:** The "Redeem Now" link leading to the external AWS S3 bucket.
+<img width="586" height="258" alt="Screenshot 2026-10-15 005611" src="https://github.com/user-attachments/assets/ab95e118-3c9b-4b9b-9c11-20a28d302c0e" />
+
+
+### Action 3: Analyze Url / Attachment
+* **Selected Option:** `Malicious`
+* **Hybrid Analysis Score:** 100/100 (MALICIOUS), flagged as `AsyncRAT` / `BLIND SPIDER`.
+* **ANY.RUN Sandbox Result:** 100/100 Threat Score, detected `Coffee.exe` dropped from `free-coffee.zip` with explicit AsyncRAT MUTEX detection.
+* **VirusTotal Detections:** 18/63 security vendors flagged `free-coffee.zip` as malicious.
+<img width="556" height="335" alt="Screenshot 2026-10-15 005703" src="https://github.com/user-attachments/assets/628b5d08-07af-41ad-92ee-693010bccb37" />
+
+
+### Action 4: Check If Mail Delivered to User
+* **Selected Option:** `Delivered`
+* **Reasoning:** Based on the initial alert details and email security record (`Action: Allowed`), the phishing email was successfully delivered directly to the recipient's inbox (`Felix@letsdefend.io`) without being blocked by mail filters.
+
+<img width="565" height="183" alt="Screenshot 2026-10-15 005804" src="https://github.com/user-attachments/assets/344e0c0e-82c0-41d7-93a7-a78db357e0ed" />
+
+
+### Action 5: Delete Email From Recipient
+* **Action Taken:** Clicked `Delete`.
+* **Reasoning:** Since the phishing email landed successfully in the user's inbox (`Felix@letsdefend.io`) and contains malicious links and payloads, standard incident response remediation requires purging/deleting the malicious email from the user's mailbox to prevent re-opening.
+<img width="580" height="175" alt="Screenshot 2026-10-15 010022" src="https://github.com/user-attachments/assets/9d369755-2c7d-4d68-af17-e0d546bfa2f8" />
+
+
+### Action 6: Check If Someone Opened the Malicious File/URL
+* **Selected Option:** `Opened`
+* **Reasoning:** Proxy and endpoint logs confirmed that the user (`Felix`) successfully accessed the external S3 bucket URL via Google Chrome and downloaded the malicious archive (`free-coffee.zip`). Subsequent endpoint monitoring verified that the compressed payload was extracted and executed (`Coffee.exe`), establishing outbound communication with the threat actor's Command and Control (C2) infrastructure. Therefore, the artifact was confirmed as Opened.
+<img width="527" height="276" alt="Screenshot 2026-10-15 010107" src="https://github.com/user-attachments/assets/2881692d-5795-4525-805c-31fa0846f9aa" />
+
+<img width="937" height="492" alt="Screenshot 2026-10-15 005025" src="https://github.com/user-attachments/assets/e5530b12-bb5d-4e60-881b-c4d6a90441cb" />
+<img width="785" height="397" alt="Screenshot 2026-10-15 011726" src="https://github.com/user-attachments/assets/89cabc4d-424f-4810-b913-ffda7f32645d" />
+
+
+### Action 7: Host Containment
+* **Action Taken:** Isolated the compromised workstation (`Felix` / `172.16.20.151`) via the EDR containment toggle to prevent lateral movement and C2 communication.
+
+<img width="582" height="177" alt="Screenshot 2026-10-15 012133" src="https://github.com/user-attachments/assets/6975492d-30fc-490e-98fd-ca674c7f5c81" />
+<img width="640" height="358" alt="Screenshot 2026-10-15 012259" src="https://github.com/user-attachments/assets/cc2d9782-2ff4-4347-b665-544c10ae9fcf" />
+
+
+### Action 8: Add Artifacts
+* **Recorded Indicators of Compromise (IoCs):**
+  * **103.80.134.63:** Originating IP address
+  * **AWS S3 Bucket URL:** `https://files-ld.s3.us-east-2.amazonaws.com/59cbd215-76ea-434d-93ca-4d6aec3bac98-free-coffee.zip`
+  * **6f33ae4bf134c49faa14517a275c039ca1818b24fc2304649969e399ab2fb389:** Cryptographic hash of file
+  * **172.16.20.151:** Internal IP address of host
+<img width="656" height="382" alt="Screenshot 2026-10-15 013000" src="https://github.com/user-attachments/assets/481e5541-1383-4616-b623-424140649e7d" />
+
+
+### Action 9: Analyst Note & Case Submission
+* **Analyst Note Summary:** Investigated phishing alert (Event ID 257) targeting host `Felix` (`172.16.20.151`). Confirmed email delivery from typosquatted domain `coffeeshooop.com` containing a malicious AWS S3 download link (`free-coffee.zip`). Proxy and EDR logs verified that the user downloaded, extracted, and executed the payload (`coffee.exe`), which was confirmed via sandbox analysis to be AsyncRAT initiating outbound C2 communication to `37.120.233.226`. Remediation actions completed successfully: malicious email purged from mailbox, host isolated via EDR, and IoCs documented for blocking. Case closed as True Positive.
+* **Final Verdict:** `True Positive`
+
+<img width="607" height="316" alt="Screenshot 2026-10-15 013053" src="https://github.com/user-attachments/assets/154bb37f-2e5c-4763-82d9-f0014ba2e14d" />
+
+<img width="543" height="210" alt="Screenshot 2026-10-15 013110" src="https://github.com/user-attachments/assets/9b6e0e90-17fa-4915-b2da-df3d4512a21f" />
+
+
+---
+
+## 💡 Conclusion & Remediation Summary
+* **Verdict:** True Positive
+* **Reasoning:** Confirmed delivery and user execution of an AsyncRAT malware payload delivered via a spearphishing link and typosquatted email domain.
+* **Remediation Completed:**
+  1. Purged phishing email from user's mailbox (`Felix@letsdefend.io`).
+  2. Isolated compromised host (`172.16.20.151`) via EDR.
+  3. Documented IoCs (`103.80.134.63`, file hash, S3 download URL, C2 IP `37.120.233.226`) for network-wide perimeter blocking.
