@@ -1,4 +1,4 @@
-<img width="645" height="682" alt="Screenshot 2026-10-15 222254" src="https://github.com/user-attachments/assets/7bbaa6d5-7994-4452-a3e0-8998c9226602" /><img width="1826" height="922" alt="Screenshot 2026-10-13 084511" src="https://github.com/user-attachments/assets/3d4c5d36-39f9-4ba9-8a3b-85cd86ce395c" /># 🛡️ LetsDefend Lab Write-Up: SOC105 - Requested T.I. URL Address
+# 🛡️ LetsDefend Lab Write-Up: SOC105 - Requested T.I. URL Address
 
 ## 📌 Executive Summary
 * **Platform:** LetsDefend
