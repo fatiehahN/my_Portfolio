@@ -7,13 +7,8 @@
 
 ---
 
-## 1. 📌 Project Title & Overview
-* **Project Title:** Real-Time Endpoint File Integrity Monitoring (FIM) & Automated Threat Intelligence via VirusTotal
-* **Objective:** Deploy and configure the Wazuh SIEM `syscheck` module to perform real-time File Integrity Monitoring (FIM) on a Windows 11 endpoint, integrating VirusTotal API threat intelligence and automated Active Response to detect and purge malicious files (`EICAR`) instantaneously.
 
----
-
-## 2. 🏗️ Infrastructure Architecture & Initial Environment Setup
+##  🏗️ Infrastructure Architecture & Initial Environment Setup
 
 Before implementing Threat Intelligence and Active Response, a full SOC lab environment was built consisting of a central SIEM Manager and an Endpoint Agent.
 
