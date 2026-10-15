@@ -1,4 +1,4 @@
-<img width="652" height="323" alt="Screenshot 2026-10-14 223639" src="https://github.com/user-attachments/assets/a0967f0a-e385-4e48-be1c-2e23eb2a6995" /><img width="1750" height="382" alt="Screenshot 2026-10-14 195101" src="https://github.com/user-attachments/assets/8d27fc85-2f5d-4d34-acb5-4067d1fa7568" /><img width="767" height="372" alt="Screenshot 2026-10-14 200349" src="https://github.com/user-attachments/assets/951cca47-d987-4ec8-b5c1-01184ca88261" /># 🛡️ LetsDefend Lab Write-Up: SOC145 - Ransomware Detected
+# 🛡️ LetsDefend Lab Write-Up: SOC145 - Ransomware Detected
 
 ## 📌 Executive Summary
 * **Platform:** LetsDefend
