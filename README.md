@@ -1,4 +1,4 @@
-# 🛡️ Nurfatiehah Nabilah | Cybersecurity & SOC Analyst Portfolio
+# 🛡️ NuFfatiehah Nabilah | Cybersecurity & SOC Analyst Portfolio
 
 Welcome to my portfolio! I am a final-year **Information Assurance and Security** undergraduate at IIUM with a strong academic background (CGPA 3.76, Dean's List) and hands-on operational focus in **SOC Analysis, Incident Response, and GRC**. 
 
@@ -8,7 +8,7 @@ I am actively seeking a **6-month cybersecurity internship (March – September 
 
 ## 📜 Professional Certifications
 
-* **CompTIA Security+**[cite: 2]
+* **CompTIA Security+**
   * *What it covers & validates:* Core security functions, risk management, threat identification, cryptography, identity management, and foundational incident response principles.
 * **CCNA: Introduction to Networks**
   * *What it covers & validates:* Core networking concepts, OSI/TCP-IP models, IP addressing (IPv4/IPv6), routing, switching, and network security fundamentals essential for analyzing traffic and logs.
