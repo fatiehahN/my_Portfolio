@@ -1,100 +1,117 @@
-# 🛡️ LetsDefend Lab Write-Up: SOC105 - Requested T.I. URL Address
+<img width="652" height="323" alt="Screenshot 2026-10-14 223639" src="https://github.com/user-attachments/assets/a0967f0a-e385-4e48-be1c-2e23eb2a6995" /><img width="1750" height="382" alt="Screenshot 2026-10-14 195101" src="https://github.com/user-attachments/assets/8d27fc85-2f5d-4d34-acb5-4067d1fa7568" /><img width="767" height="372" alt="Screenshot 2026-10-14 200349" src="https://github.com/user-attachments/assets/951cca47-d987-4ec8-b5c1-01184ca88261" /># 🛡️ LetsDefend Lab Write-Up: SOC145 - Ransomware Detected
 
 ## 📌 Executive Summary
 * **Platform:** LetsDefend
-* **Alert Name:** SOC105 - Requested T.I. URL Address
-* **Objective:** Investigate a security alert triggered by a URL linked to Threat Intelligence (T.I.) and determine whether it represents malicious activity or safe user behavior.
+* **Alert Name:** SOC145 - Ransomware Detected
+* **Objective:** Investigate a ransomware execution alert on an enterprise endpoint, analyze binary artifacts, check for network communication/C2 activity, and contain the compromised system.
 
 ---
 
 ## 🔍 Initial Alert Details
-* **EventID** :75
-* **Event Time** :Mar, 07, 2021, 05:47 PM
-* **Rule :SOC105** - Requested T.I. URL address
-* **Level** :Security Analyst
-* **Source Address** :10.15.15.12
-* **Source Hostname** :MarksPhone
-* **Destination Address** :67.199.248.10
-* **Destination Hostname** :bit.ly
-* **Username** :Mark
-* **Request URL** :https://bit.ly/TAPSCAN
-* **User Agent** :Mozilla/5.0 (Windows NT 5.1; Win64; x64) AppleWebKit/537.36 
-(KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36
-* **Device Action** :Allowed
+* **Event ID  :** 92
+* **Event Time:** May 23, 2021, 07:32 PM
+*  **Rule :** SOC145 - Ransomware Detected
+*  **Alert Type :** Malware
+*  **MITRE ATT&CK :** T1204
+* **Source IP:** 172.16.17.88
+* **Source Hostname:** MarkPRD
+* **File Name:** `ab.exe`
+* **File Hash (MD5):** `0b486fe0503524cfe4726a4022fa6a68`
+* **File Size:** 775.50 KB
+* **Device Action:** Allowed
 
-
-<img width="656" height="386" alt="Screenshot 2026-10-13 231939" src="https://github.com/user-attachments/assets/2fe48da3-d1d7-49c9-8025-480bba39d626" />
-
+<img width="767" height="372" alt="Screenshot 2026-10-14 200349" src="https://github.com/user-attachments/assets/8a6bd3b1-1b07-4738-a135-d2cd5317863e" />
 
 ---
 
 ## 📋 Step-by-Step Investigation Process
 
-### Step 1: Analyzing the Alert Trigger
-* The alert fired because the endpoint requested a URL (`bit.ly/TAPSCAN`) flagged by threat intelligence rules. 
-* I began by reviewing the source host (`MarksPhone`) and user (`Mark`) to understand who initiated the request.
+### Step 1: Initial Alert Review
+* Reviewed alert metadata for Event ID 92 (`SOC145 - Ransomware Detected`).
+* Observed that the **Device Action** was marked as **Allowed**, indicating that security controls failed to block or isolate the binary upon arrival and execution.
 
-### Step 2: Destination IP & Domain Reputation Check
-* I checked the destination IP address (`67.199.248.10`) on **AbuseIPDB**.
-* **Finding:** The IP belongs to Bitly's legitimate content delivery network (CDN) infrastructure with a clean abuse score of 1%.
+### Step 2: VirusTotal Threat Intelligence Analysis
+* Searched the file hash (`0b486fe0503524cfe4726a4022fa6a68`) on **VirusTotal**.
+* **Finding:** Flagged by **57 out of 66** security vendors as malicious.
+* **Malware Family:** Identified as **Avaddon Ransomware** (`ransomware.avaddon/delshad`).
 
-<img width="842" height="845" alt="Screenshot 2026-10-13 230221" src="https://github.com/user-attachments/assets/4ab7f17a-cdfe-44fd-bde4-b2fb0383eb16" />
-
-### Step 3: VirusTotal Analysis
-* I analyzed the shortened link (`https://bit.ly/TAPSCAN`) using **VirusTotal** to check for malicious indicators and community feedback.
-* **Finding:** VirusTotal scans showed no malicious flags for the URL itself, confirming it pointed to a standard redirect service.
-
-<img width="1826" height="922" alt="Screenshot 2026-10-13 084511" src="https://github.com/user-attachments/assets/83d31495-afc1-4553-8a5c-26a4074c99d1" />
+<img width="1787" height="812" alt="Screenshot 2026-10-14 160225" src="https://github.com/user-attachments/assets/784c2f43-af39-40ff-8046-49105fe01eb6" />
 
 
-### Step 4: urlscan.io Analysis
-* I used **urlscan.io** to safely preview the behavior and redirection chain of the link without visiting it directly on a personal machine.
-* **Finding:** The analysis showed that the shortened link safely expands through a standard analytics tracker directly to the official Google Play Store page for **"TapScanner"** (`pdf.tap.scanner`).
+### Step 3: Endpoint Security Inspection
+* Inspected process execution logs for host `MarkPRD` (`172.16.17.88`) in **Endpoint Security**.
+* **Finding:** Confirmed that `ab.exe` was actively executed on the system.
+* **Suspicious Behaviors Detected:**
+  * `ab.exe` spawned `wmic.exe` to delete Windows Volume Shadow Copies (`wmic shadowcopy delete`).
+  * `ab.exe` spawned `bcdedit.exe` to disable Windows recovery options (`bcdedit /set {default} recoveryenabled No`).
 
-<img width="883" height="867" alt="Screenshot 2026-10-13 230820" src="https://github.com/user-attachments/assets/81d968a6-f1c7-483e-8d2b-ad33d61924c1" />
-<img width="847" height="885" alt="Screenshot 2026-10-13 230852" src="https://github.com/user-attachments/assets/3ec90553-1696-409a-b992-d2fc0f669b27" />
- 
-### Step 5: Endpoint Inspection
-* I reviewed endpoint logs for `MarksPhone` (10.15.15.12) to see if any secondary malicious actions occurred.
-* **Finding:** No malicious payload downloads, unauthorized scripts, or suspicious file executions were found on the endpoint.
-  
-<img width="645" height="682" alt="Screenshot 2026-10-15 222254" src="https://github.com/user-attachments/assets/ffd20060-5664-488d-aa7d-69c84964eda7" />
+<img width="1731" height="810" alt="Screenshot 2026-10-14 195259" src="https://github.com/user-attachments/assets/aab6f350-7f8e-43d3-9052-21beddd91d3f" />
+
+
+### Step 4: Network Log & C2 Check
+* Pivoted to **Log Management** to query network activity for IP `172.16.17.88` around May 23, 2021.
+* **Finding:** No outbound HTTP/HTTPS proxy logs or Command and Control (C2) network connections were recorded. Impact was localized to local ransomware payload execution.
+
+<img width="1750" height="382" alt="Screenshot 2026-10-14 195101" src="https://github.com/user-attachments/assets/7bf9a20e-41b5-4604-a9a6-bc58a741c573" />
+
 
 ---
+
 ## 📘 Playbook Execution & Incident Handling
 
-### Action 1: Analyze Threat Intel Data
-* **Selected Option:** `Non-malicious`
-* **Description:** Checked the target URL and destination IP against threat intelligence tools (VirusTotal, AnyRun, urlscan.io, AbuseIPDB). Since all indicators showed clean results pointing to a legitimate Play Store app, the activity was classified as safe.
+### Action 1: Define Threat Indicator
+* **Selection:** `Other`
+* **Description:** The alert was triggered by local ransomware execution (`ab.exe`) on endpoint `MarkPRD` (`172.16.17.88`). "Other" was selected as it did not match network traffic, AV malfunction, or persistence startup categories.
 
-<img width="608" height="346" alt="Screenshot 2026-10-13 231954" src="https://github.com/user-attachments/assets/a0468f8e-36f5-4e05-b16e-486223fb112e" />
-
-### Action 2: Add Artifacts
-* **Description:** Recorded all relevant indicators collected during the investigation to attach to the incident record:
-  * **Source IP:** `10.15.15.12` (Source Endpoint)
-  * **Destination IP:** `67.199.248.10` (Bitly CDN)
-  * **URL Address:** `https://bit.ly/TAPSCAN` (Shortened Redirect URL)
-    
-<img width="647" height="435" alt="Screenshot 2026-10-13 232404" src="https://github.com/user-attachments/assets/0a2a6237-a226-4918-82ed-11bdffd263fc" />
+<img width="625" height="215" alt="Screenshot 2026-10-14 214235" src="https://github.com/user-attachments/assets/3c828107-5174-4552-b60d-c867a5b344fc" />
 
 
-### Action 3: Write Analyst Note
-* **Description:** Documented a clear summary of findings for future reference and audit trails:
-  1. **IP Analysis:** Destination IP `67.199.248.10` verified as clean Bitly CDN infrastructure (1% abuse score).
-  2. **URL Analysis:** URL expands safely to the official Google Play Store page for "TapScanner".
-  3. **Endpoint Analysis:** No suspicious downloads or secondary compromises detected on `MarksPhone`.
+### Action 2: Check Quarantine / Clean Status
+* **Selection:** `Not Quarantined`
+* **Description:** Checked Device Action metadata (`Allowed`) and process logs in Endpoint Security. Confirmed `ab.exe` ran successfully without automated interference, requiring manual intervention.
 
-<img width="678" height="385" alt="Screenshot 2026-10-13 232557" src="https://github.com/user-attachments/assets/4cc6c44c-afb8-400f-870b-4606b02b29ba" />
+<img width="567" height="237" alt="Screenshot 2026-10-14 214709" src="https://github.com/user-attachments/assets/2ec497ad-3b31-4389-8feb-69594f10f606" />
 
-### Action 4: Case Closure & Verdict Submission
-* **Selected Result:** `False Positive`
-* **Description:** Confirmed and closed the case as a False Positive since no security threat or policy violation took place. No host containment was necessary.
 
-<img width="672" height="292" alt="Screenshot 2026-10-13 232622" src="https://github.com/user-attachments/assets/70320cf2-89e1-4f90-a91f-1e466714c8da" />
+### Action 3: Analyze Malware & C2 Check
+* **Selection:** `Malicious` (Malware) | `Not Accessed` (C2)
+* **Description:**
+  * Analyzed binary hash on VirusTotal (57/66 detection consensus confirming Avaddon Ransomware).
+  * Queried Log Management for external connections; no C2 communication was observed.
+ 
+  <img width="532" height="302" alt="Screenshot 2026-10-14 215907" src="https://github.com/user-attachments/assets/a4313b23-7376-44bb-967d-7e14bd546298" />
+
+<img width="590" height="292" alt="Screenshot 2026-10-14 222253" src="https://github.com/user-attachments/assets/7800df3b-4b2f-4e40-99b5-4e648ee9eebf" />
+
+
+### Action 4: Host Containment
+* **Action Taken:** Enabled **Host Containment** via EDR for `MarkPRD` (`172.16.17.88`).
+* **Description:** Isolated the compromised host from the network to prevent lateral movement, file encryption spread across network shares, or potential C2 connection establishing later.
+
+### Action 5: Add Artifacts
+* **Description:** Recorded indicators of compromise (IoCs) to attach to the case record:
+  * **MD5 Hash:** `0b486fe0503524cfe4726a4022fa6a68` (Avaddon Ransomware payload)
+  * **Source IP:** `172.16.17.88` (Compromised Endpoint)
+  * **Source Hostname:** `MarkPRD` (Target Windows Host)
+  * **File Name:** `ab.exe` (Malicious Executable)
+ 
+ <img width="625" height="377" alt="Screenshot 2026-10-14 223329" src="https://github.com/user-attachments/assets/292a571e-4bf0-45fd-8c41-e86f1afcd6e6" />
+
+
+### Action 6: Write Analyst Note & Case Submission
+* **Verdict:** `True Positive`
+* **Description:** Documented full findings detailing local ransomware execution, shadow copy deletion, host containment actions, and closed the case as a confirmed True Positive.
+
+<img width="652" height="323" alt="Screenshot 2026-10-14 223639" src="https://github.com/user-attachments/assets/027f6128-4e0d-46c4-ad8c-087c1a4bef23" />
 
 ---
 
-## 💡 Conclusion & Final Action
-* **Verdict:** False Positive
-* **Reasoning:** The user clicked a legitimate shortened link (`bit.ly`) that redirected to a safe, official application page on the Google Play Store rather than a malicious command-and-control (C2) or malware hosting site.
-* **Action Taken:** The alert was closed as non-malicious, and no host containment or system isolation was required.
+## 💡 Conclusion & Final Remediation
+* **Verdict:** True Positive
+* **Reasoning:** Executable `ab.exe` was confirmed as Avaddon Ransomware based on 57/66 threat vendor detections and active host behavior attempting backup deletion (`wmic`, `bcdedit`).
+* **Remediation Steps Taken:**
+  1. Isolated host `MarkPRD` (`172.16.17.88`) from the network via EDR.
+  2. Blocked hash `0b486fe0503524cfe4726a4022fa6a68` on endpoint protection platforms.
+  3. Escalated to Tier 2 / Incident Response team for host forensic imaging, backup restoration, and credential reset.
+
+  <img width="567" height="375" alt="Screenshot 2026-10-14 223725" src="https://github.com/user-attachments/assets/c53f3aa9-17df-4020-84a8-340f6745e842" />
