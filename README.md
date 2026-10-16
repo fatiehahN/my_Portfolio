@@ -1,4 +1,4 @@
-# 🛡️ NuFatiehah Nabilah | Cybersecurity & SOC Analyst Portfolio
+# 🛡️ NurFatiehah Nabilah | Cybersecurity & SOC Analyst Portfolio
 
 Welcome to my portfolio! I am a final-year **Information Assurance and Security** undergraduate at IIUM with a strong academic background (CGPA 3.76, Dean's List) and hands-on operational focus in **SOC Analysis, Incident Response, and GRC**. 
 
