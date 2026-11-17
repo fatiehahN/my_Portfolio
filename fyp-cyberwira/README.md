@@ -38,12 +38,28 @@ The system provides:
 
 ### 🔐 Level 1: Password Security
 Educates players about strong password creation, password reuse risks, and Multi-Factor Authentication (MFA).
+<img width="1917" height="1078" alt="Screenshot 2026-11-17 213808" src="https://github.com/user-attachments/assets/a4c353f0-1782-4861-b60b-d84e677a32b0" />
+<img width="1917" height="1078" alt="Screenshot 2026-11-17 213147" src="https://github.com/user-attachments/assets/4422ebd9-71ef-46b5-8a6a-f6041e882a34" />
+<img width="1917" height="1073" alt="Screenshot 2026-11-17 213240" src="https://github.com/user-attachments/assets/a31dbce3-54e8-4ae4-b8da-6aeb113a596a" />
+<img width="1917" height="1078" alt="Screenshot 2026-11-17 213416" src="https://github.com/user-attachments/assets/dc5be32c-fee4-4bfb-a04b-446237167917" />
+
 
 ### 📧 Level 2: Phishing Detection
 Challenges players to identify suspicious emails, recognize phishing indicators, and distinguish legitimate messages from malicious attempts.
 
+<img width="1912" height="1063" alt="Screenshot 2026-11-17 213453" src="https://github.com/user-attachments/assets/2a621347-1400-4465-a4ad-62f4d892f751" />
+<img width="1917" height="1078" alt="Screenshot 2026-11-17 213528" src="https://github.com/user-attachments/assets/bf61e079-6e92-4ecb-acc5-9d6bf1075acf" />
+<img width="1903" height="1050" alt="Screenshot 2026-11-17 213605" src="https://github.com/user-attachments/assets/af0aae0a-55d6-4ec9-aae9-dc03cc67d202" />
+
+
 ### 🛒 Level 3: Online Scam Prevention
 Simulates online shopping situations where players must evaluate sellers, inspect product information, identify suspicious reviews, and avoid fraudulent payment requests.
+<img width="1895" height="992" alt="Screenshot 2026-11-17 213616" src="https://github.com/user-attachments/assets/9fec6c1a-988f-4596-bda2-a95620760ed1" />
+<img width="1917" height="1075" alt="Screenshot 2026-11-17 213634" src="https://github.com/user-attachments/assets/bf6fcc16-c77f-4755-a15d-20064b2e21e0" />
+<img width="1917" height="1078" alt="Screenshot 2026-11-17 213733" src="https://github.com/user-attachments/assets/730dbccb-7aa3-4fc7-924a-c4a2deaeec04" />
+<img width="1907" height="1052" alt="Screenshot 2026-11-17 213739" src="https://github.com/user-attachments/assets/47f7d829-7c7c-411e-b1ef-e031a4c7b8d4" />
+<img width="1913" height="1078" alt="Screenshot 2026-11-17 213712" src="https://github.com/user-attachments/assets/102a857e-804e-4783-a647-1b2826b9cf00" />
+
 
 ## 📊 Performance Analytics System
 
@@ -56,6 +72,8 @@ CyberWira incorporates an In-Game Analysis system to evaluate player performance
 - Cybersecurity strengths and weaknesses.
 - Mistake summaries and improvement suggestions.
 - Gameplay performance insights.
+<img width="1917" height="1013" alt="Screenshot 2026-11-17 213753" src="https://github.com/user-attachments/assets/ea131a0a-3914-4c90-8b3c-f65cacc962ad" />
+
 
 ### Teacher / Organizer Analytics Dashboard
 
@@ -66,6 +84,11 @@ CyberWira incorporates an In-Game Analysis system to evaluate player performance
 - Behavioural analysis and decision-making insights.
 
 This feature helps teachers and organizers evaluate player performance and identify cybersecurity topics that may require further attention.
+
+<img width="1811" height="753" alt="Screenshot 2026-11-17 213906" src="https://github.com/user-attachments/assets/8b27a56f-3a62-49ad-a271-916a978e6ac9" />
+<img width="1183" height="792" alt="Screenshot 2026-11-17 213920" src="https://github.com/user-attachments/assets/23aca0b6-d964-45b1-afe6-4cf5baeebaab" />
+<img width="1312" height="946" alt="Screenshot 2026-11-17 213929" src="https://github.com/user-attachments/assets/e3e4472c-279d-45ab-8968-4cdc30f67e12" />
+
 
 ## 🌍 Community Impact
 
@@ -104,27 +127,6 @@ Encourages safer digital behaviour and improves cybersecurity decision-making th
 - Teacher and organizer analytics dashboard.
 - Firebase-based data management.
 
-## 📸 Project Screenshots
-
-*Screenshots and gameplay demonstrations will be added here.*
-
-<!-- Replace the image paths below with your actual screenshots -->
-
-| Main Menu | Game Environment |
-|---|---|
-| ![Main Menu](screenshots/main-menu.png) | ![Game Environment](screenshots/game-environment.png) |
-
-| Level 1: Password Security | Level 2: Phishing Detection |
-|---|---|
-| ![Level 1](screenshots/level-1.png) | ![Level 2](screenshots/level-2.png) |
-
-| Level 3: Online Scam Prevention | Teacher Analytics Dashboard |
-|---|---|
-| ![Level 3](screenshots/level-3.png) | ![Teacher Dashboard](screenshots/teacher-dashboard.png) |
-
-| Player Performance Dashboard |
-|---|
-| ![Player Dashboard](screenshots/player-dashboard.png) |
 
 ## 🚀 Future Enhancements
 
